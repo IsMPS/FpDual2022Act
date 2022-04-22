@@ -214,7 +214,6 @@ public class CityManagerImpl implements CityManager {
     }
 
     public void insert(Connection con, City city){
-
     }
 
     /**
