@@ -32,4 +32,13 @@ public interface CityManager {
      */
     public City findById(Connection con, int id);
 
+    public City findByString(Connection con, String a);
+
+    public List<City> findAllStartedBy(Connection con,String a);
+
+    public List<City> findAllFinished(Connection con,String a);
+
+    public void update(Connection con,City city);
+
+    public void insert(Connection con, City city);
 }

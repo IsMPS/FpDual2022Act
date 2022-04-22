@@ -33,6 +33,13 @@ public class City implements Comparable<City>{
         }
     }
 
+    public City(int id, String name, String district, int population) {
+            this.id = id;
+            this.name = name;
+            this.district = district;
+            this.population = BigDecimal.valueOf(population) ;
+    }
+
     @Override
     public int compareTo(City o) {
         return this.name.compareTo(o.getName());

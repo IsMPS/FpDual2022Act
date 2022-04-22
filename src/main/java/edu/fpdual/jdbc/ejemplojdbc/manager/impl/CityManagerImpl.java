@@ -9,12 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -91,6 +86,135 @@ public class CityManagerImpl implements CityManager {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public City findByString(Connection con, String a) {
+        //prepare SQL statement
+        String sql = "select * "
+                + "from city a, Country b "
+                + "where a.name = ? "
+                + "and a.CountryCode = b.Code";
+
+        // Create general statement
+        try (PreparedStatement stmt = con.prepareStatement(sql)) {
+            //Add Parameters
+            stmt.setString(1, a);
+            // Queries the DB
+            ResultSet result = stmt.executeQuery();
+            // Set before first registry before going through it.
+            result.beforeFirst();
+
+            // Initialize variable
+            City city = null;
+
+            // Run through each result
+            while (result.next()) {
+                // Initializes a city per result
+                city = new City(result);
+                Country country = new Country(result);
+                city.setCountry(country);
+            }
+
+            return city;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public List<City> findAllStartedBy(Connection con,String a){
+        //prepare SQL statement
+        String sql = "select * "
+                + "from city a, Country b "
+                + "where a.name like ? ";
+
+        // Create general statement
+        try (PreparedStatement stmt = con.prepareStatement(sql)) {
+            //Add Parameters
+            stmt.setString(1, a+"%");
+            // Queries the DB
+            ResultSet result = stmt.executeQuery();
+            // Set before first registry before going through it.
+            result.beforeFirst();
+
+            // Initialize variable
+            City city = null;
+            List<City> cities = new ArrayList<>();
+
+            // Run through each result
+            while (result.next()) {
+                // Initializes a city per result
+                city = new City(result);
+                Country country = new Country(result);
+                city.setCountry(country);
+                cities.add(city);
+            }
+
+            return cities;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    public List<City> findAllFinished(Connection con,String a){
+        //prepare SQL statement
+        String sql = "select * "
+                + "from city a, Country b "
+                + "where a.name like ? ";
+
+        // Create general statement
+        try (PreparedStatement stmt = con.prepareStatement(sql)) {
+            //Add Parameters
+            stmt.setString(1, "%"+a);
+            // Queries the DB
+            ResultSet result = stmt.executeQuery();
+            // Set before first registry before going through it.
+            result.beforeFirst();
+
+            // Initialize variable
+            City city = null;
+            List<City> cities = new ArrayList<>();
+
+            // Run through each result
+            while (result.next()) {
+                // Initializes a city per result
+                city = new City(result);
+                Country country = new Country(result);
+                city.setCountry(country);
+                cities.add(city);
+            }
+
+            return cities;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void update(Connection con,City city){
+        //prepare SQL statement
+        String sql = "update City set District = ?, name = ?, Population = ? where id = ?";
+
+        // Create general statement
+        try (PreparedStatement stmt = con.prepareStatement(sql)) {
+            //Add Parameters
+            stmt.setString(1,city.getDistrict() );
+            stmt.setString(2,city.getName() );
+            stmt.setBigDecimal(3,city.getPopulation());
+            stmt.setInt(4,city.getId() );
+            // Queries the DB
+            stmt.execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void insert(Connection con, City city){
+
     }
 
     /**
